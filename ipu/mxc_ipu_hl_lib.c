@@ -1240,8 +1240,10 @@ again:
 			fbdev = FBDEV0;
 		else if (output->fb_disp.fb_num == 1)
 			fbdev = FBDEV1;
-		else
+		else {
 			fbdev = FBDEV2;
+			if (access(FBDEV2, F_OK)) fbdev = FBDEV1;
+		}
 
 		dbg(DBG_INFO, "Output Show to %s\n", fbdev);
 
@@ -3465,8 +3467,10 @@ int mxc_ipu_lib_task_control(int ctl_cmd, void * arg, ipu_lib_handle_t * ipu_han
 					fbdev = FBDEV0;
 				else if (ipu_priv_handle->output.fb_num == 1)
 					fbdev = FBDEV1;
-				else
+				else {
 					fbdev = FBDEV2;
+					if (access(FBDEV2, F_OK)) fbdev = FBDEV1;
+				}
 				if ((ipu_priv_handle->output.fd_fb = open(fbdev, O_RDWR, 0)) < 0) {
 					dbg(DBG_ERR, "Unable to open %s\n", fbdev);
 					ret = -1;
